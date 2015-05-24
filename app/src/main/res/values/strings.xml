@@ -3,4 +3,12 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Add Location -->
+    <string name="add_location">Add Location</string>
+    <string name="enter_location_or_zip">Enter location name or zip code</string>
+
+
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

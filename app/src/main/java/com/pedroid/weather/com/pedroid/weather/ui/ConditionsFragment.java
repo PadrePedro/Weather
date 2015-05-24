@@ -59,13 +59,16 @@ public class ConditionsFragment extends Fragment implements RequestListener {
     private void refreshData() {
         if (IConditionsRequest.CURRENT_LOCATION.equals(location)) {
             LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            conditionsRequest = RequestFactory.getInstance().getConditionsRequest(location.getLatitude(), location.getLongitude(), this);
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (location != null) {
+                conditionsRequest = RequestFactory.getInstance().getConditionsRequest(location.getLatitude(), location.getLongitude(), this);
+            }
         }
         else {
             conditionsRequest = RequestFactory.getInstance().getConditionsRequest(location, this);
         }
-        RequestProcessor.execute(conditionsRequest);
+        if (conditionsRequest != null)
+            RequestProcessor.execute(conditionsRequest);
     }
 
     @Override

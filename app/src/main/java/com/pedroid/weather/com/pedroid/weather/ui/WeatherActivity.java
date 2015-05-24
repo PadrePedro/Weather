@@ -1,11 +1,18 @@
 package com.pedroid.weather.com.pedroid.weather.ui;
 
+import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -24,6 +31,7 @@ public class WeatherActivity extends ActionBarActivity implements RequestListene
     private ViewPager pager;
     private ConditionsAdapter adapter;
     private LocationManager locationManager;
+    private BroadcastReceiver receiver;
 
 
     @Override
@@ -33,9 +41,18 @@ public class WeatherActivity extends ActionBarActivity implements RequestListene
         pager = (ViewPager)findViewById(R.id.pager);
         adapter = new ConditionsAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String location = intent.getStringExtra(AddLocationFragment.LOCATION);
+                adapter.add(location);
+                adapter.notifyDataSetChanged();
+                pager.setCurrentItem(adapter.getCount()-1);
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter(AddLocationFragment.LOCATION_ADDED));
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,10 +70,18 @@ public class WeatherActivity extends ActionBarActivity implements RequestListene
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            DialogFragment dlg = new AddLocationFragment();
+            dlg.show(getFragmentManager(), "tag");
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
     }
 
     @Override
