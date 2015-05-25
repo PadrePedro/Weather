@@ -9,6 +9,7 @@ public interface IConditionsRequest extends IRequest {
 
     enum TempUnit {CELSIUS, FAHRENHEIT};
     enum VelocityUnit {KPH, MPH};
+    enum ThreadCount {ONE, MULTI};
 
     void setLocation(String location);
     void setLocation(float lat, float lng);

@@ -8,6 +8,18 @@
     <string name="add_location">Add Location</string>
     <string name="enter_location_or_zip">Enter location name or zip code</string>
 
+    <!-- units -->
+    <string name="wind_label">Wind</string>
+    <string name="unit_mph">MPH</string>
+    <string name="unit_kph">KPH</string>
+
+    <string name="temp_label">Temp</string>
+    <string name="unit_celsius">C\u00B0</string>
+    <string name="unit_fahrenheit">F\u00B0</string>
+
+    <string name="theads_label">Threads</string>
+    <string name="unit_one">One</string>
+    <string name="unit_multi">Multi</string>
 
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>

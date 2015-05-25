@@ -1,5 +1,6 @@
 package com.pedroid.weather.model;
 
+import com.pedroid.weather.api.IConditionsRequest;
 import com.pedroid.weather.api.IRequest;
 
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 public class RequestCache {
 
     private static RequestCache instance;
-    private HashMap<String,IRequest> map;
+    private HashMap<String,IConditionsRequest> map;
 
     private RequestCache() {
         map = new HashMap<>();
@@ -23,11 +24,11 @@ public class RequestCache {
         return instance;
     }
 
-    public IRequest get(String location) {
+    public IConditionsRequest getConditions(String location) {
         return map.get(location);
     }
 
-    public void put(String location, IRequest request) {
+    public void putConditions(String location, IConditionsRequest request) {
         map.put(location, request);
     }
 }

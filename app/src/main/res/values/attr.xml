@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <declare-styleable name="Switch">
+        <attr name="label" format="string" localization="suggested" />
+        <attr name="value1Text" format="string" localization="suggested" />
+        <attr name="value2Text" format="string" localization="suggested" />
+    </declare-styleable>
+
+</resources> 

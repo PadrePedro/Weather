@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="240dp"
+    android:layout_height="match_parent"
+    android:background="@color/material_blue_grey_800"
+    android:orientation="vertical">
 
+    <com.pedroid.weather.widget.Switch
+        android:id="@+id/velocitySwitch"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        custom:label="@string/wind_label"
+        custom:value1Text="@string/unit_mph"
+        custom:value2Text="@string/unit_kph" />
+
+    <com.pedroid.weather.widget.Switch
+        android:id="@+id/temperatureSwitch"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        custom:label="@string/temp_label"
+        custom:value1Text="@string/unit_fahrenheit"
+        custom:value2Text="@string/unit_celsius" />
+
+    <com.pedroid.weather.widget.Switch
+        android:id="@+id/threadSwitch"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        custom:label="@string/temp_label"
+        custom:value1Text="@string/unit_fahrenheit"
+        custom:value2Text="@string/unit_celsius" />
 </LinearLayout>

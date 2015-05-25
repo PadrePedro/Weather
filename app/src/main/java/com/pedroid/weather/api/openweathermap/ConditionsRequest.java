@@ -2,7 +2,7 @@ package com.pedroid.weather.api.openweathermap;
 
 import com.pedroid.weather.api.IConditionsRequest;
 import com.pedroid.weather.api.Request;
-import com.pedroid.weather.api.JsonUtils;
+import com.pedroid.weather.utils.JsonUtils;
 import com.pedroid.weather.api.RequestListener;
 
 import java.io.Serializable;

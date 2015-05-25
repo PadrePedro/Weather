@@ -1,5 +1,6 @@
 package com.pedroid.weather.model;
 
+import com.pedroid.weather.api.IRequest;
 import com.pedroid.weather.api.Request;
 import com.pedroid.weather.api.RequestListener;
 
@@ -37,14 +38,14 @@ public class Locations implements RequestListener {
     }
 
     @Override
-    public void onSuccess(Request request) {
+    public void onSuccess(IRequest request) {
         if (listener != null) {
             listener.onSuccess(request);
         }
     }
 
     @Override
-    public void onFailure(Request request, String reason) {
+    public void onFailure(IRequest request, String reason) {
 
     }
 }

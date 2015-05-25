@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <color name="switch_foreground">#808080</color>
+    <color name="switch_selected_background">#e8e8e8</color>
+    <color name="switch_deselected_background">#b8b8b8</color>
+
+</resources>

@@ -5,6 +5,6 @@ package com.pedroid.weather.api;
  */
 public interface RequestListener {
 
-    void onSuccess(Request request);
-    void onFailure(Request request, String reason);
+    void onSuccess(IRequest request);
+    void onFailure(IRequest request, String reason);
 }

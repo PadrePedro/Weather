@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import com.pedroid.weather.R;
+import com.pedroid.weather.api.IRequest;
 import com.pedroid.weather.api.Request;
 import com.pedroid.weather.api.RequestListener;
 
@@ -58,12 +59,12 @@ public class AddLocationFragment extends DialogFragment implements RequestListen
     }
 
     @Override
-    public void onSuccess(Request request) {
+    public void onSuccess(IRequest request) {
 
     }
 
     @Override
-    public void onFailure(Request request, String reason) {
+    public void onFailure(IRequest request, String reason) {
 
     }
 }
