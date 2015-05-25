@@ -1,4 +1,4 @@
-package com.pedroid.weather.com.pedroid.weather.ui;
+package com.pedroid.weather.ui;
 
 import android.content.Context;
 import android.location.Location;

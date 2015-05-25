@@ -1,35 +1,29 @@
-package com.pedroid.weather.com.pedroid.weather.ui;
+package com.pedroid.weather.ui;
 
-import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.pedroid.weather.R;
 import com.pedroid.weather.api.IConditionsRequest;
-import com.pedroid.weather.api.RequestFactory;
-import com.pedroid.weather.api.RequestProcessor;
 import com.pedroid.weather.api.Request;
 import com.pedroid.weather.api.RequestListener;
-import com.pedroid.weather.api.openweathermap.ConditionsRequest;
 
 
 public class WeatherActivity extends ActionBarActivity implements RequestListener {
 
     private IConditionsRequest conditionsRequest;
     private ViewPager pager;
-    private ConditionsAdapter adapter;
+    private com.pedroid.weather.ui.ConditionsAdapter adapter;
     private LocationManager locationManager;
     private BroadcastReceiver receiver;
 
@@ -39,7 +33,7 @@ public class WeatherActivity extends ActionBarActivity implements RequestListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
         pager = (ViewPager)findViewById(R.id.pager);
-        adapter = new ConditionsAdapter(getSupportFragmentManager());
+        adapter = new com.pedroid.weather.ui.ConditionsAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
         receiver = new BroadcastReceiver() {
             @Override

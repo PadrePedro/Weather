@@ -1,4 +1,4 @@
-package com.pedroid.weather.api;
+package com.pedroid.weather.utils;
 
 /**
  * Created by pedro on 5/21/15.

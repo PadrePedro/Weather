@@ -1,4 +1,4 @@
-package com.pedroid.weather.com.pedroid.weather.ui;
+package com.pedroid.weather.ui;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

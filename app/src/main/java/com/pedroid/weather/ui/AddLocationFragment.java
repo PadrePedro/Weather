@@ -1,4 +1,4 @@
-package com.pedroid.weather.com.pedroid.weather.ui;
+package com.pedroid.weather.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -6,20 +6,15 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import com.pedroid.weather.R;
-import com.pedroid.weather.api.IConditionsRequest;
 import com.pedroid.weather.api.Request;
-import com.pedroid.weather.api.RequestFactory;
 import com.pedroid.weather.api.RequestListener;
-import com.pedroid.weather.utils.BroadcastUtils;
 
 /**
  * Created by pedro on 5/23/15.
