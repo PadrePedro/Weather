@@ -12,6 +12,9 @@ import com.pedroid.weather.api.IConditionsRequest.VelocityUnit;
 import com.pedroid.weather.api.RequestProcessor;
 import com.pedroid.weather.api.RequestProcessor.ThreadCount;
 import com.pedroid.weather.utils.BroadcastUtils;
+import com.pedroid.weather.utils.JsonUtils;
+
+import java.util.List;
 
 /**
  * Created by pedro on 5/23/15.
@@ -27,6 +30,7 @@ public class Settings {
     private final String PREF_TEMP = "pref.temperature";
     private final String PREF_VELOCITY = "pref.velocity";
     private final String PREF_THREADS = "pref.threads";
+    private final String PREF_LOCATIONS = "pref.locations";
 
     private Settings(Context context) {
         this.context = context;
@@ -60,10 +64,31 @@ public class Settings {
         return velocityUnit;
     }
 
+    public String getVelocityUnitString() {
+        if (velocityUnit == VelocityUnit.MPH) {
+            return "MPH";
+        }
+        else if (velocityUnit == VelocityUnit.KPH) {
+            return "KPH";
+        }
+        return "";
+    }
+
     public void setVelocityUnit(VelocityUnit unit) {
         velocityUnit = unit;
         PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(PREF_VELOCITY, unit.ordinal()).commit();
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(BroadcastUtils.MSG_REDRAW));
+    }
+
+    public void setLocations(List location) {
+        String json = JsonUtils.serialize(location);
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PREF_LOCATIONS, json).commit();
+    }
+
+    public List getLocations() {
+        String def = "[\"" + IConditionsRequest.CURRENT_LOCATION + "\"]";
+        String json = PreferenceManager.getDefaultSharedPreferences(context).getString(PREF_LOCATIONS, def);
+        return JsonUtils.deserializeList(json);
     }
 
     public ThreadCount getThreadCount() {

@@ -7,7 +7,6 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_cond_fair"
         tools:context=".WeatherActivity">
 
         <!--<com.pedroid.weather.widget.CrossFadeImageView-->
@@ -17,6 +16,7 @@
 
         <ImageView
             android:id="@+id/bgConditionImageView"
+            android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

@@ -3,7 +3,7 @@ package com.pedroid.weather.api.openweathermap;
 import com.pedroid.weather.api.IConditionsRequest;
 import com.pedroid.weather.api.Request;
 import com.pedroid.weather.utils.JsonUtils;
-import com.pedroid.weather.api.RequestListener;
+import com.pedroid.weather.api.IRequestListener;
 
 import java.io.Serializable;
 import java.util.List;
@@ -29,10 +29,10 @@ public class ConditionsRequest extends Request implements IConditionsRequest {
         public float temp_min;
         public float temp_max;
         public float pressure;
-        public float humidity;
+        public int humidity;
     }
     private static class Wind implements Serializable {
-        public float wind;
+        public float speed;
         public float deg;
     }
     private static class Weather implements Serializable {
@@ -46,14 +46,16 @@ public class ConditionsRequest extends Request implements IConditionsRequest {
         public Wind wind;
         public String name;
         public List<Weather> weather;
+        public String message;
+        public int cod;
     }
 
-    public ConditionsRequest(String location, RequestListener listener) {
+    public ConditionsRequest(String location, IRequestListener listener) {
         super(listener);
         this.location = location;
     }
 
-    public ConditionsRequest(double lat, double lon, RequestListener listener) {
+    public ConditionsRequest(double lat, double lon, IRequestListener listener) {
         super(listener);
         this.lat = lat;
         this.lon = lon;
@@ -73,6 +75,9 @@ public class ConditionsRequest extends Request implements IConditionsRequest {
         }
         String json = httpGetRequest(queryString);
         conditions = JsonUtils.deserialize(json, Conditions.class);
+        if (conditions != null && conditions.cod != 200) {
+            throw new RuntimeException(conditions.message + " " + location);
+        }
     }
 
     @Override
@@ -110,14 +115,56 @@ public class ConditionsRequest extends Request implements IConditionsRequest {
 
     @Override
     public double getWindVelocity(VelocityUnit unit) {
-        if (conditions != null && conditions.wind != null)
-            return conditions.wind.wind;
+        if (conditions != null && conditions.wind != null) {
+            if (unit == VelocityUnit.KPH)
+                return conditions.wind.speed;
+            else if (unit == VelocityUnit.MPH)
+                return 0.621371 * conditions.wind.speed;
+        }
         return 0;
     }
 
     @Override
     public String getWindDirection() {
-        return null;
+        return "";
+    }
+
+    @Override
+    public double getHiTemperature(TempUnit unit) {
+        float kelvin;
+        if (conditions != null && conditions.main != null) {
+            kelvin = conditions.main.temp_max;
+            if (unit == TempUnit.FAHRENHEIT) {
+                return kelvinToFahrenheit(kelvin);
+            }
+            else if (unit == TempUnit.CELSIUS) {
+                return kelvinToCelsius(kelvin);
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public double getLoTemperature(TempUnit unit) {
+        float kelvin;
+        if (conditions != null && conditions.main != null) {
+            kelvin = conditions.main.temp_min;
+            if (unit == TempUnit.FAHRENHEIT) {
+                return kelvinToFahrenheit(kelvin);
+            }
+            else if (unit == TempUnit.CELSIUS) {
+                return kelvinToCelsius(kelvin);
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public int getHumidity() {
+        if (conditions != null && conditions.main != null) {
+            return conditions.main.humidity;
+        }
+        return 0;
     }
 
     @Override

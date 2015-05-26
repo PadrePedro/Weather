@@ -14,13 +14,12 @@ import android.widget.FrameLayout;
 
 import com.pedroid.weather.R;
 import com.pedroid.weather.api.IRequest;
-import com.pedroid.weather.api.Request;
-import com.pedroid.weather.api.RequestListener;
+import com.pedroid.weather.api.IRequestListener;
 
 /**
  * Created by pedro on 5/23/15.
  */
-public class AddLocationFragment extends DialogFragment implements RequestListener {
+public class AddLocationFragment extends DialogFragment implements IRequestListener {
 
     interface AddLocationListener {
         void locationAdded(String location);

@@ -2,9 +2,7 @@ package com.pedroid.weather.api.openweathermap;
 
 import com.pedroid.weather.api.IConditionsRequest;
 import com.pedroid.weather.api.ILocationRequest;
-import com.pedroid.weather.api.IRequest;
-import com.pedroid.weather.api.Request;
-import com.pedroid.weather.api.RequestListener;
+import com.pedroid.weather.api.IRequestListener;
 import com.pedroid.weather.api.IWeatherRequestFactory;
 
 /**
@@ -13,17 +11,17 @@ import com.pedroid.weather.api.IWeatherRequestFactory;
 public class OpenWeatherMapRequestFactory implements IWeatherRequestFactory {
 
     @Override
-    public IConditionsRequest getConditionsRequest(double lat, double lon, RequestListener listener) {
+    public IConditionsRequest getConditionsRequest(double lat, double lon, IRequestListener listener) {
         return new ConditionsRequest(lat, lon, listener);
     }
 
     @Override
-    public IConditionsRequest getConditionsRequest(String location, RequestListener listener) {
+    public IConditionsRequest getConditionsRequest(String location, IRequestListener listener) {
         return new ConditionsRequest(location, listener);
     }
 
     @Override
-    public ILocationRequest getLocationRequest(String location, RequestListener listener) {
+    public ILocationRequest getLocationRequest(String location, IRequestListener listener) {
         return null;
     }
 }

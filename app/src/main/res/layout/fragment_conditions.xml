@@ -47,4 +47,51 @@
         android:layout_toRightOf="@id/temperatureTextView"
         android:textSize="40dp" />
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/margin_large"
+        android:layout_toRightOf="@id/temperatureUnitTextView"
+        android:layout_below="@id/conditionsIconImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            style="@style/temp_details_layout">
+            <TextView
+                android:text="@string/temp_hi"
+                style="@style/temp_details"/>
+            <TextView
+                android:id="@+id/tempHiTextView"
+                style="@style/temp_details"/>
+        </LinearLayout>
+        <LinearLayout
+            style="@style/temp_details_layout">
+            <TextView
+                android:text="@string/temp_lo"
+                style="@style/temp_details"/>
+            <TextView
+                android:id="@+id/tempLoTextView"
+                style="@style/temp_details"/>
+        </LinearLayout>
+        <LinearLayout
+            style="@style/temp_details_layout">
+            <TextView
+                android:text="@string/humidity"
+                style="@style/temp_details"/>
+            <TextView
+                android:id="@+id/humidityTextView"
+                style="@style/temp_details"/>
+        </LinearLayout>
+        <LinearLayout
+            style="@style/temp_details_layout">
+            <TextView
+                android:text="@string/wind"
+                style="@style/temp_details"/>
+            <TextView
+                android:id="@+id/windTextView"
+                style="@style/temp_details"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
 </RelativeLayout>

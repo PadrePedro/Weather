@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,9 +19,8 @@ import android.widget.TextView;
 import com.pedroid.weather.R;
 import com.pedroid.weather.api.IConditionsRequest;
 import com.pedroid.weather.api.IRequest;
-import com.pedroid.weather.api.Request;
 import com.pedroid.weather.api.RequestFactory;
-import com.pedroid.weather.api.RequestListener;
+import com.pedroid.weather.api.IRequestListener;
 import com.pedroid.weather.api.RequestProcessor;
 import com.pedroid.weather.model.RequestCache;
 import com.pedroid.weather.model.Settings;
@@ -31,12 +29,16 @@ import com.pedroid.weather.utils.BroadcastUtils;
 /**
  * Created by pedro on 5/22/15.
  */
-public class ConditionsFragment extends Fragment implements RequestListener, LocationListener {
+public class ConditionsFragment extends Fragment implements IRequestListener, LocationListener {
 
 
     // views
     private TextView temperatureTextView;
     private TextView temperatureUnitTextView;
+    private TextView tempHiTextView;
+    private TextView tempLoTextView;
+    private TextView windTextView;
+    private TextView humidityTextView;
     private TextView locationTextView;
     private TextView conditionTextView;
     private ImageView conditionsIconImageView;
@@ -71,6 +73,10 @@ public class ConditionsFragment extends Fragment implements RequestListener, Loc
         locationTextView = (TextView)view.findViewById(R.id.locationTextView);
         conditionTextView = (TextView)view.findViewById(R.id.conditionTextView);
         conditionsIconImageView = (ImageView)view.findViewById(R.id.conditionsIconImageView);
+        tempHiTextView = (TextView)view.findViewById(R.id.tempHiTextView);
+        tempLoTextView = (TextView)view.findViewById(R.id.tempLoTextView);
+        windTextView = (TextView)view.findViewById(R.id.windTextView);
+        humidityTextView = (TextView)view.findViewById(R.id.humidityTextView);
         refreshData();
 
         IntentFilter filter = new IntentFilter();
@@ -138,13 +144,18 @@ public class ConditionsFragment extends Fragment implements RequestListener, Loc
     }
 
     private void updateView() {
+        Settings s = Settings.getInstance(getActivity());
         temperatureTextView.setText(String.format("%d",
-                (int) conditionsRequest.getTemperature(Settings.getInstance(getActivity()).getTempUnit()),
-                Settings.getInstance(getActivity()).getTempUnitString()));
-        temperatureUnitTextView.setText(Settings.getInstance(getActivity()).getTempUnitString());
+                (int) conditionsRequest.getTemperature(s.getTempUnit()),
+                s.getTempUnitString()));
+        temperatureUnitTextView.setText(s.getTempUnitString());
         locationTextView.setText(conditionsRequest.getLocation());
         conditionTextView.setText(conditionsRequest.getConditions());
         conditionsIconImageView.setImageResource(getConditionsIcon(conditionsRequest.getConditions()));
+        tempHiTextView.setText(String.format("%d", (int) conditionsRequest.getHiTemperature(s.getTempUnit())));
+        tempLoTextView.setText(String.format("%d", (int)conditionsRequest.getLoTemperature(s.getTempUnit())));
+        windTextView.setText(String.format("%d %s", (int)conditionsRequest.getWindVelocity(s.getVelocityUnit()), s.getVelocityUnitString()));
+        humidityTextView.setText(String.format("%d%%", (int)conditionsRequest.getHumidity()));
     }
 
     private int getConditionsIcon(String conditions) {

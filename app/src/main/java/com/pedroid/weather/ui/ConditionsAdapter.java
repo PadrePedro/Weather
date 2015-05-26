@@ -5,15 +5,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.pedroid.weather.api.IConditionsRequest;
+import com.pedroid.weather.utils.JsonUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by pedro on 5/22/15.
  */
 public class ConditionsAdapter extends FragmentPagerAdapter {
 
-    private ArrayList<String> locations = new ArrayList<>();
+    private static class LocationList extends ArrayList<String> implements Serializable {
+    }
+
+    private List<String> locations = new ArrayList<>();
 
     public ConditionsAdapter(FragmentManager fm) {
         super(fm);
@@ -34,5 +40,13 @@ public class ConditionsAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         return ConditionsFragment.newInstance(locations.get(position));
+    }
+
+    public List getLocations() {
+        return locations;
+    }
+
+    public void setLoctions(List locations) {
+        this.locations = locations;
     }
 }

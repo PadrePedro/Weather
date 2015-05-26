@@ -1,8 +1,7 @@
 package com.pedroid.weather.model;
 
 import com.pedroid.weather.api.IRequest;
-import com.pedroid.weather.api.Request;
-import com.pedroid.weather.api.RequestListener;
+import com.pedroid.weather.api.IRequestListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +9,10 @@ import java.util.List;
 /**
  * Created by pedro on 5/22/15.
  */
-public class Locations implements RequestListener {
+public class Locations implements IRequestListener {
 
     private static Locations instance;
-    private RequestListener listener;
+    private IRequestListener listener;
     private ArrayList<String> locations;
 
     private Locations() {
@@ -29,7 +28,7 @@ public class Locations implements RequestListener {
         return instance;
     }
 
-    public void setRequestListener(RequestListener listener) {
+    public void setRequestListener(IRequestListener listener) {
         this.listener = listener;
     }
 

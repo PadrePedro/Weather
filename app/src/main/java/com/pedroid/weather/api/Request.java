@@ -14,20 +14,26 @@ import java.net.URLEncoder;
 
 /**
  * Created by pedro on 5/21/15.
+ *
+ * Base request runner, whichs executes a requests and reports back the success/failure status
+ *
  */
 public abstract class Request implements IRequest {
 
-    private RequestListener listener;
+    private IRequestListener listener;
     private final String UTF8 = "UTF-8";
     private final String TAG = getClass().getSimpleName();
 
-    public Request(RequestListener listener) {
+    public Request(IRequestListener listener) {
         this.listener = listener;
     }
-    public void setListener(RequestListener listener) {
+    public void setListener(IRequestListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Calls doExecute() method on subclass and reports back the status to the listener
+     */
     @Override
     public void run() {
 
@@ -35,15 +41,21 @@ public abstract class Request implements IRequest {
             doExecute();
         }
         catch (Exception e) {
-            if (listener != null)
+            if (listener != null) {
                 listener.onFailure(this, e.getMessage());
+                return;
+            }
         }
-        finally {
-            if (listener != null)
-                listener.onSuccess(this);
-        }
+        if (listener != null)
+            listener.onSuccess(this);
     }
 
+    /**
+     * URL encoder
+     *
+     * @param url
+     * @return encoded url
+     */
     protected String urlEncoder(String url) {
         try {
             return URLEncoder.encode(url, UTF8);
@@ -53,6 +65,13 @@ public abstract class Request implements IRequest {
         }
     }
 
+    /**
+     * GET request
+     *
+     * @param path path to get accessed
+     * @return response string from the GET request
+     * @throws Exception
+     */
     protected String httpGetRequest(String path) throws Exception {
         Log.d(TAG, "httpGetRequest " + path);
         HttpClient httpClient = new DefaultHttpClient();

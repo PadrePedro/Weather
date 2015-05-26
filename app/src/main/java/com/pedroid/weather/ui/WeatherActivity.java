@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.location.LocationManager;
+import android.media.Image;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -21,29 +22,37 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.pedroid.weather.R;
 import com.pedroid.weather.api.IConditionsRequest;
+import com.pedroid.weather.api.IRequest;
+import com.pedroid.weather.api.IRequestListener;
+import com.pedroid.weather.api.RequestFactory;
 import com.pedroid.weather.api.RequestProcessor;
 import com.pedroid.weather.api.RequestProcessor.ThreadCount;
 import com.pedroid.weather.model.RequestCache;
 import com.pedroid.weather.model.Settings;
 import com.pedroid.weather.utils.BroadcastUtils;
-import com.pedroid.weather.widget.CrossFadeImageView;
 
 
-public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener {
+public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener, IRequestListener {
 
-    private IConditionsRequest conditionsRequest;
     private ViewPager pager;
-    private com.pedroid.weather.ui.ConditionsAdapter adapter;
-    private LocationManager locationManager;
+    private ConditionsAdapter adapter;
     private BroadcastReceiver receiver;
     private DrawerLayout drawerLayout;
     private ImageView bgConditionsImageView;
-    private Bitmap bm1;
-    private Bitmap bm2;
 
+
+    private class WeatherActivityReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String location = intent.getStringExtra(AddLocationFragment.LOCATION);
+            IConditionsRequest req = RequestFactory.getInstance().getConditionsRequest(location, WeatherActivity.this);
+            RequestProcessor.execute(req);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +72,9 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
 
         // setup layout
         setContentView(R.layout.activity_weather);
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         bgConditionsImageView = (ImageView)findViewById(R.id.bgConditionImageView);
+        bgConditionsImageView.setImageResource(getRandomBackground());
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         findViewById(R.id.overflowImageView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,24 +97,13 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
         });
         pager = (ViewPager)findViewById(R.id.pager);
         adapter = new com.pedroid.weather.ui.ConditionsAdapter(getSupportFragmentManager());
+        adapter.setLoctions(Settings.getInstance(this).getLocations());
         pager.setAdapter(adapter);
         pager.setOnPageChangeListener(this);
 
         // setup broadcast receiver
-        receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String location = intent.getStringExtra(AddLocationFragment.LOCATION);
-                adapter.add(location);
-                adapter.notifyDataSetChanged();
-                pager.setCurrentItem(adapter.getCount()-1);
-            }
-        };
+        receiver = new WeatherActivityReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter(AddLocationFragment.LOCATION_ADDED));
-
-        bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.bg_cond_cloudy);
-        bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.bg_cond_sunny);
-
     }
 
 
@@ -140,6 +139,18 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
+    private int getRandomBackground() {
+        int resources[] = { R.drawable.bg_cond_clear,
+                            R.drawable.bg_cond_fair,
+                            R.drawable.bg_cond_boats,
+                            R.drawable.bg_cond_sunny,
+                            R.drawable.bg_cond_plant,
+                            R.drawable.bg_cond_city_sky,
+                            R.drawable.bg_cond_bw,
+                            R.drawable.bg_cond_rain};
+        return resources[(int)(System.currentTimeMillis()/10000) % resources.length];
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -153,19 +164,38 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
 
     @Override
     public void onPageSelected(int position) {
-//        Bitmap bm = BitmapFactory.decodeResource(getResources(),
-//                position % 2 == 0 ? R.drawable.bg_cond_any : R.drawable.bg_cond_cloudy);
-//        bgConditionsImageView.setImage(bm);
-        if (position % 2 == 0) {
-//            bgConditionsImageView.setImageBitmap(bm1);
-        }
-        else {
-//            bgConditionsImageView.setImageBitmap(bm2);
-        }
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onFailure(final IRequest request, String reason) {
+        if (!isFinishing()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(WeatherActivity.this, R.string.location_not_found, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onSuccess(final IRequest request) {
+        if (!isFinishing()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    IConditionsRequest req = (IConditionsRequest)request;
+                    adapter.add(req.getLocation());
+                    adapter.notifyDataSetChanged();
+                    pager.setCurrentItem(adapter.getCount() - 1);
+                    Settings.getInstance(WeatherActivity.this).setLocations(adapter.getLocations());
+                }
+            });
+        }
     }
 }
