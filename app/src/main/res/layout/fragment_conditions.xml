@@ -3,93 +3,104 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/margin_large">
+    android:id="@+id/layout"
+    android:alpha="0"
+    >
 
     <TextView
         android:id="@+id/locationTextView"
-        android:textColor="@color/conditions_text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/conditions_text_color"
         android:textSize="35dp" />
 
     <ImageView
-        android:layout_below="@id/locationTextView"
-        android:src="@drawable/cond_partly"
         android:id="@+id/conditionsIconImageView"
         android:layout_width="@dimen/conditions_icon_size"
-        android:layout_height="@dimen/conditions_icon_size" />
+        android:layout_height="@dimen/conditions_icon_size"
+        android:layout_below="@id/locationTextView"
+        android:src="@drawable/cond_partly" />
 
     <TextView
         android:id="@+id/conditionTextView"
-        android:textColor="@color/conditions_text_color"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/locationTextView"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
         android:layout_toRightOf="@id/conditionsIconImageView"
+        android:textColor="@color/conditions_text_color"
         android:textSize="25dp" />
 
     <TextView
         android:id="@+id/temperatureTextView"
-        android:textColor="@color/conditions_text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/conditionsIconImageView"
+        android:textColor="@color/conditions_text_color"
         android:textSize="80dp" />
 
     <TextView
         android:id="@+id/temperatureUnitTextView"
-        android:textColor="@color/conditions_text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
         android:layout_below="@id/conditionsIconImageView"
+        android:layout_marginTop="13dp"
         android:layout_toRightOf="@id/temperatureTextView"
+        android:textColor="@color/conditions_text_color"
         android:textSize="40dp" />
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/detailsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/conditionsIconImageView"
         android:layout_marginLeft="@dimen/margin_large"
         android:layout_toRightOf="@id/temperatureUnitTextView"
-        android:layout_below="@id/conditionsIconImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:orientation="vertical">
 
-        <LinearLayout
-            style="@style/temp_details_layout">
+        <LinearLayout style="@style/temp_details_layout">
+
             <TextView
-                android:text="@string/temp_hi"
-                style="@style/temp_details"/>
+                style="@style/temp_details"
+                android:text="@string/temp_hi" />
+
             <TextView
                 android:id="@+id/tempHiTextView"
-                style="@style/temp_details"/>
+                style="@style/temp_details" />
         </LinearLayout>
-        <LinearLayout
-            style="@style/temp_details_layout">
+
+        <LinearLayout style="@style/temp_details_layout">
+
             <TextView
-                android:text="@string/temp_lo"
-                style="@style/temp_details"/>
+                style="@style/temp_details"
+                android:text="@string/temp_lo" />
+
             <TextView
                 android:id="@+id/tempLoTextView"
-                style="@style/temp_details"/>
+                style="@style/temp_details" />
         </LinearLayout>
-        <LinearLayout
-            style="@style/temp_details_layout">
+
+        <LinearLayout style="@style/temp_details_layout">
+
             <TextView
-                android:text="@string/humidity"
-                style="@style/temp_details"/>
+                style="@style/temp_details"
+                android:text="@string/humidity" />
+
             <TextView
                 android:id="@+id/humidityTextView"
-                style="@style/temp_details"/>
+                style="@style/temp_details" />
         </LinearLayout>
-        <LinearLayout
-            style="@style/temp_details_layout">
+
+        <LinearLayout style="@style/temp_details_layout">
+
             <TextView
-                android:text="@string/wind"
-                style="@style/temp_details"/>
+                style="@style/temp_details"
+                android:text="@string/wind" />
+
             <TextView
                 android:id="@+id/windTextView"
-                style="@style/temp_details"/>
+                style="@style/temp_details" />
         </LinearLayout>
 
     </LinearLayout>

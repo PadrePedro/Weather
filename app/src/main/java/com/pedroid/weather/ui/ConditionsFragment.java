@@ -1,5 +1,6 @@
 package com.pedroid.weather.ui;
 
+import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -33,6 +35,7 @@ public class ConditionsFragment extends Fragment implements IRequestListener, Lo
 
 
     // views
+    private View layout;
     private TextView temperatureTextView;
     private TextView temperatureUnitTextView;
     private TextView tempHiTextView;
@@ -67,16 +70,16 @@ public class ConditionsFragment extends Fragment implements IRequestListener, Lo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_conditions, container, false);
-        temperatureTextView = (TextView)view.findViewById(R.id.temperatureTextView);
-        temperatureUnitTextView = (TextView)view.findViewById(R.id.temperatureUnitTextView);
-        locationTextView = (TextView)view.findViewById(R.id.locationTextView);
-        conditionTextView = (TextView)view.findViewById(R.id.conditionTextView);
-        conditionsIconImageView = (ImageView)view.findViewById(R.id.conditionsIconImageView);
-        tempHiTextView = (TextView)view.findViewById(R.id.tempHiTextView);
-        tempLoTextView = (TextView)view.findViewById(R.id.tempLoTextView);
-        windTextView = (TextView)view.findViewById(R.id.windTextView);
-        humidityTextView = (TextView)view.findViewById(R.id.humidityTextView);
+        layout = inflater.inflate(R.layout.fragment_conditions, container, false);
+        temperatureTextView = (TextView)layout.findViewById(R.id.temperatureTextView);
+        temperatureUnitTextView = (TextView)layout.findViewById(R.id.temperatureUnitTextView);
+        locationTextView = (TextView)layout.findViewById(R.id.locationTextView);
+        conditionTextView = (TextView)layout.findViewById(R.id.conditionTextView);
+        conditionsIconImageView = (ImageView)layout.findViewById(R.id.conditionsIconImageView);
+        tempHiTextView = (TextView)layout.findViewById(R.id.tempHiTextView);
+        tempLoTextView = (TextView)layout.findViewById(R.id.tempLoTextView);
+        windTextView = (TextView)layout.findViewById(R.id.windTextView);
+        humidityTextView = (TextView)layout.findViewById(R.id.humidityTextView);
         refreshData();
 
         IntentFilter filter = new IntentFilter();
@@ -92,7 +95,7 @@ public class ConditionsFragment extends Fragment implements IRequestListener, Lo
             }
         };
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(receiver, filter);
-        return view;
+        return layout;
 
     }
 
@@ -145,6 +148,7 @@ public class ConditionsFragment extends Fragment implements IRequestListener, Lo
 
     private void updateView() {
         Settings s = Settings.getInstance(getActivity());
+        fadeIn();
         temperatureTextView.setText(String.format("%d",
                 (int) conditionsRequest.getTemperature(s.getTempUnit()),
                 s.getTempUnitString()));
@@ -155,7 +159,7 @@ public class ConditionsFragment extends Fragment implements IRequestListener, Lo
         tempHiTextView.setText(String.format("%d", (int) conditionsRequest.getHiTemperature(s.getTempUnit())));
         tempLoTextView.setText(String.format("%d", (int)conditionsRequest.getLoTemperature(s.getTempUnit())));
         windTextView.setText(String.format("%d %s", (int)conditionsRequest.getWindVelocity(s.getVelocityUnit()), s.getVelocityUnitString()));
-        humidityTextView.setText(String.format("%d%%", (int)conditionsRequest.getHumidity()));
+        humidityTextView.setText(String.format("%d%%", (int) conditionsRequest.getHumidity()));
     }
 
     private int getConditionsIcon(String conditions) {
@@ -190,5 +194,18 @@ public class ConditionsFragment extends Fragment implements IRequestListener, Lo
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    private void fadeIn() {
+        ValueAnimator animator = ValueAnimator.ofFloat(0,1);
+        animator.setDuration(400);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Float alpha = (Float)animation.getAnimatedValue();
+                layout.setAlpha(alpha);
+            }
+        });
+        animator.start();
     }
 }

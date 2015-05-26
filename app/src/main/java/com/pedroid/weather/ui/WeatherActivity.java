@@ -1,16 +1,12 @@
 package com.pedroid.weather.ui;
 
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.location.LocationManager;
-import android.media.Image;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -43,7 +39,7 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
     private BroadcastReceiver receiver;
     private DrawerLayout drawerLayout;
     private ImageView bgConditionsImageView;
-
+    private ImageView deleteLocationImageView;
 
     private class WeatherActivityReceiver extends BroadcastReceiver {
         @Override
@@ -75,6 +71,13 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
         bgConditionsImageView = (ImageView)findViewById(R.id.bgConditionImageView);
         bgConditionsImageView.setImageResource(getRandomBackground());
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        deleteLocationImageView = (ImageView)findViewById(R.id.deleteLocationImageView);
+        deleteLocationImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleDeleteLocation();
+            }
+        });
         findViewById(R.id.overflowImageView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +91,7 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
                 LocalBroadcastManager.getInstance(WeatherActivity.this).sendBroadcast(new Intent(BroadcastUtils.MSG_REFRESH));
             }
         });
-        findViewById(R.id.newImageView).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.newLocationImageView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment dlg = new AddLocationFragment();
@@ -164,10 +167,30 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
 
     @Override
     public void onPageSelected(int position) {
+        deleteLocationImageView.setVisibility(position>0 ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
+
+    }
+
+
+
+    private void handleDeleteLocation() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.confirm_delete_location)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        adapter.deleteItem(pager.getCurrentItem());
+                        adapter.notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        builder.create().show();
 
     }
 

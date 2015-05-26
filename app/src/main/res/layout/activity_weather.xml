@@ -45,10 +45,19 @@
             android:layout_height="wrap_content" />
 
         <ImageView
-            android:id="@+id/newImageView"
+            android:id="@+id/newLocationImageView"
             android:src="@drawable/ic_action_new"
             android:layout_margin="@dimen/margin_default"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/deleteLocationImageView"
+            android:src="@drawable/ic_action_discard"
+            android:layout_margin="@dimen/margin_default"
+            android:layout_above="@id/newLocationImageView"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

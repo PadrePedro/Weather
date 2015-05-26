@@ -29,7 +29,8 @@
     <string name="unit_one">One</string>
     <string name="unit_multi">Multi</string>
 
-    <!-- toasts -->
+    <!-- messages and toasts -->
+    <string name="confirm_delete_location">Delete this location?</string>
     <string name="location_not_found">Location not found</string>
 
     <!-- dialogs strings -->

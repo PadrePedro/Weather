@@ -16,10 +16,8 @@ import java.util.List;
  */
 public class ConditionsAdapter extends FragmentPagerAdapter {
 
-    private static class LocationList extends ArrayList<String> implements Serializable {
-    }
-
     private List<String> locations = new ArrayList<>();
+    private int offset = 0;
 
     public ConditionsAdapter(FragmentManager fm) {
         super(fm);
@@ -48,5 +46,20 @@ public class ConditionsAdapter extends FragmentPagerAdapter {
 
     public void setLoctions(List locations) {
         this.locations = locations;
+    }
+
+    public void deleteItem(int position) {
+        offset += locations.size();
+        locations.remove(position);
+    }
+
+    @Override
+    public int getItemPosition(Object object){
+        return FragmentPagerAdapter.POSITION_NONE;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position + offset;
     }
 }
