@@ -4,7 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,16 +31,20 @@ import com.pedroid.weather.utils.BroadcastUtils;
 /**
  * Created by pedro on 5/22/15.
  */
-public class ConditionsFragment extends Fragment implements RequestListener {
+public class ConditionsFragment extends Fragment implements RequestListener, LocationListener {
 
-    private ImageView backgroundImageView;
-    private String location;
+
+    // views
     private TextView temperatureTextView;
     private TextView temperatureUnitTextView;
     private TextView locationTextView;
     private TextView conditionTextView;
+    private ImageView conditionsIconImageView;
+
+    private String location;
     private IConditionsRequest conditionsRequest;
     private BroadcastReceiver receiver;
+    private LocationManager locationManager;
 
     private static final String LOCATION = "location";
 
@@ -60,18 +66,23 @@ public class ConditionsFragment extends Fragment implements RequestListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_conditions, container, false);
-        backgroundImageView = (ImageView)view.findViewById(R.id.backgroundImageView);
         temperatureTextView = (TextView)view.findViewById(R.id.temperatureTextView);
         temperatureUnitTextView = (TextView)view.findViewById(R.id.temperatureUnitTextView);
         locationTextView = (TextView)view.findViewById(R.id.locationTextView);
         conditionTextView = (TextView)view.findViewById(R.id.conditionTextView);
+        conditionsIconImageView = (ImageView)view.findViewById(R.id.conditionsIconImageView);
         refreshData();
 
-        IntentFilter filter = new IntentFilter(BroadcastUtils.MSG_REFRESH);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BroadcastUtils.MSG_REFRESH);
+        filter.addAction(BroadcastUtils.MSG_REDRAW);
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                refreshData();
+                if (intent.getAction().equals(BroadcastUtils.MSG_REFRESH))
+                    refreshData();
+                else if (intent.getAction().equals(BroadcastUtils.MSG_REDRAW))
+                    updateView();
             }
         };
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(receiver, filter);
@@ -92,10 +103,13 @@ public class ConditionsFragment extends Fragment implements RequestListener {
         }
         else {
             if (IConditionsRequest.CURRENT_LOCATION.equals(location)) {
-                LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                 Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 if (location != null) {
                     conditionsRequest = RequestFactory.getInstance().getConditionsRequest(location.getLatitude(), location.getLongitude(), this);
+                }
+                else {
+                    locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, null);
                 }
             } else {
                 conditionsRequest = RequestFactory.getInstance().getConditionsRequest(location, this);
@@ -125,24 +139,45 @@ public class ConditionsFragment extends Fragment implements RequestListener {
 
     private void updateView() {
         temperatureTextView.setText(String.format("%d",
-                (int) conditionsRequest.getTemperature(Settings.getTempUnit()),
-                Settings.getTempUnitString()));
-        temperatureUnitTextView.setText(Settings.getTempUnitString());
+                (int) conditionsRequest.getTemperature(Settings.getInstance(getActivity()).getTempUnit()),
+                Settings.getInstance(getActivity()).getTempUnitString()));
+        temperatureUnitTextView.setText(Settings.getInstance(getActivity()).getTempUnitString());
         locationTextView.setText(conditionsRequest.getLocation());
         conditionTextView.setText(conditionsRequest.getConditions());
+        conditionsIconImageView.setImageResource(getConditionsIcon(conditionsRequest.getConditions()));
     }
 
-    private int getBackgroundResource(String conditions) {
+    private int getConditionsIcon(String conditions) {
         String cond = conditions.toLowerCase();
         if (cond.contains("rain"))
             return R.drawable.cond_rain;
-        if (cond.contains("clear"))
-            return R.drawable.cond_clear;
+        if (cond.contains("clear") || cond.contains("sun"))
+            return R.drawable.cond_sunny;
         if (cond.contains("cloud"))
             return R.drawable.cond_cloudy;
-        if (cond.contains("sunny"))
-            return R.drawable.cond_sunny;
-        return R.drawable.cond_any;
+        if (cond.contains("wind"))
+            return R.drawable.cond_windy;
+        return R.drawable.cond_partly;
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        conditionsRequest = RequestFactory.getInstance().getConditionsRequest(location.getLatitude(), location.getLongitude(), this);
+        RequestProcessor.execute(conditionsRequest);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
 }

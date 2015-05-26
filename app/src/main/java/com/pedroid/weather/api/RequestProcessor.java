@@ -8,13 +8,22 @@ import java.util.concurrent.Executors;
  */
 public class RequestProcessor {
 
-    private static Executor executor = Executors.newFixedThreadPool(5);
+    public static final int THREADS_ONE = 1;
+    public static final int THREADS_MANY = 4;
 
-    public static void setApiThreads(int threads) {
+    public enum ThreadCount {ONE, MULTI};
+
+
+    private static Executor executor;
+
+    public static void setThreads(int threads) {
         executor = Executors.newFixedThreadPool(threads);
     }
 
     public static void execute(IRequest request) {
+        if (executor == null) {
+            throw new RuntimeException("RequestProcessor not initialized");
+        }
         executor.execute(request);
     }
 }

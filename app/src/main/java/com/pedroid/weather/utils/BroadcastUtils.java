@@ -10,6 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 public class BroadcastUtils {
 
     public static final String MSG_REFRESH = "refresh";
+    public static final String MSG_REDRAW = "redraw";
     public static void broadcastString(Context context, String key, String value) {
         Intent intent = new Intent(key);
         intent.putExtra("STRING", value);

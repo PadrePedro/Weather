@@ -7,9 +7,8 @@ public interface IConditionsRequest extends IRequest {
 
     final String CURRENT_LOCATION = "__current_location__";
 
-    enum TempUnit {CELSIUS, FAHRENHEIT};
-    enum VelocityUnit {KPH, MPH};
-    enum ThreadCount {ONE, MULTI};
+    enum TempUnit {FAHRENHEIT, CELSIUS};
+    enum VelocityUnit {MPH, KPH};
 
     void setLocation(String location);
     void setLocation(float lat, float lng);

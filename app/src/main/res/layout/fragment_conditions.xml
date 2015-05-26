@@ -1,40 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/backgroundImageView"
-        android:scaleType="centerCrop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    android:padding="@dimen/margin_large">
 
     <TextView
         android:id="@+id/locationTextView"
+        android:textColor="@color/conditions_text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30dp" />
+        android:textSize="35dp" />
+
+    <ImageView
+        android:layout_below="@id/locationTextView"
+        android:src="@drawable/cond_partly"
+        android:id="@+id/conditionsIconImageView"
+        android:layout_width="@dimen/conditions_icon_size"
+        android:layout_height="@dimen/conditions_icon_size" />
 
     <TextView
         android:id="@+id/conditionTextView"
+        android:textColor="@color/conditions_text_color"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/locationTextView"
-        android:textSize="20dp" />
+        android:layout_toRightOf="@id/conditionsIconImageView"
+        android:textSize="25dp" />
 
     <TextView
         android:id="@+id/temperatureTextView"
+        android:textColor="@color/conditions_text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/conditionTextView"
+        android:layout_below="@id/conditionsIconImageView"
         android:textSize="80dp" />
 
     <TextView
         android:id="@+id/temperatureUnitTextView"
+        android:textColor="@color/conditions_text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/conditionTextView"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="13dp"
+        android:layout_below="@id/conditionsIconImageView"
         android:layout_toRightOf="@id/temperatureTextView"
         android:textSize="40dp" />
 

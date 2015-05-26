@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.pedroid.weather.R;
 import com.pedroid.weather.api.IConditionsRequest;
+import com.pedroid.weather.api.RequestProcessor;
+import com.pedroid.weather.api.RequestProcessor.ThreadCount;
 import com.pedroid.weather.model.Settings;
 import com.pedroid.weather.widget.Switch;
 
@@ -26,24 +28,46 @@ public class SettingsFragment extends Fragment {
 
         View layout = inflater.inflate(R.layout.fragment_settings, container, false);
         temperatureSwitch = (Switch)layout.findViewById(R.id.temperatureSwitch);
-        temperatureSwitch.selectValue(Settings.getTempUnit().ordinal());
+        temperatureSwitch.selectValue(Settings.getInstance(getActivity()).getTempUnit().ordinal());
         temperatureSwitch.setSwitchListener(new Switch.SwitchListener() {
             @Override
             public void onValue1Selected() {
-                Settings.setTempUnit(IConditionsRequest.TempUnit.FAHRENHEIT);
+                Settings.getInstance(getActivity()).setTempUnit(IConditionsRequest.TempUnit.FAHRENHEIT);
             }
 
             @Override
             public void onValue2Selected() {
-                Settings.setTempUnit(IConditionsRequest.TempUnit.FAHRENHEIT);
+                Settings.getInstance(getActivity()).setTempUnit(IConditionsRequest.TempUnit.CELSIUS);
             }
         });
         velocitySwitch = (Switch)layout.findViewById(R.id.velocitySwitch);
-        velocitySwitch.selectValue(Settings.getVelocityUnit().ordinal());
+        velocitySwitch.selectValue(Settings.getInstance(getActivity()).getVelocityUnit().ordinal());
+        velocitySwitch.setSwitchListener(new Switch.SwitchListener() {
+            @Override
+            public void onValue1Selected() {
+                Settings.getInstance(getActivity()).setVelocityUnit(IConditionsRequest.VelocityUnit.MPH);
+            }
 
+            @Override
+            public void onValue2Selected() {
+                Settings.getInstance(getActivity()).setVelocityUnit(IConditionsRequest.VelocityUnit.KPH);
+            }
+        });
         threadsSwitch = (Switch)layout.findViewById(R.id.threadSwitch);
-        threadsSwitch.selectValue(Settings.getVelocityUnit().ordinal());
+        threadsSwitch.selectValue(Settings.getInstance(getActivity()).getVelocityUnit().ordinal());
+        threadsSwitch.setSwitchListener(new Switch.SwitchListener() {
+            @Override
+            public void onValue1Selected() {
+                Settings.getInstance(getActivity()).setThreadCount(RequestProcessor.ThreadCount.ONE);
+                RequestProcessor.setThreads(RequestProcessor.THREADS_ONE);
+            }
 
+            @Override
+            public void onValue2Selected() {
+                Settings.getInstance(getActivity()).setThreadCount(ThreadCount.MULTI);
+                RequestProcessor.setThreads(RequestProcessor.THREADS_MANY);
+            }
+        });
         return layout;
     }
 

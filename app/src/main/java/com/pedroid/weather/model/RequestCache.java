@@ -31,4 +31,8 @@ public class RequestCache {
     public void putConditions(String location, IConditionsRequest request) {
         map.put(location, request);
     }
+
+    public void clear() {
+        map.clear();
+    }
 }
