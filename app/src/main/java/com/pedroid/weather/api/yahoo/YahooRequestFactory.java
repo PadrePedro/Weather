@@ -11,6 +11,9 @@ import com.pedroid.weather.api.IRequestFactory;
 
 /**
  * Created by pedro on 5/22/15.
+ *
+ *  Request factory for Yahoo Weather
+ *
  */
 public class YahooRequestFactory implements IRequestFactory {
 

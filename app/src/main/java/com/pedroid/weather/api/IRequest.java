@@ -3,7 +3,7 @@ package com.pedroid.weather.api;
 /**
  * Created by pedro on 5/22/15.
  *
- * Interface for request ojbects
+ * Interface for request objects
  */
 public interface IRequest extends Runnable {
 

@@ -13,6 +13,8 @@ import java.util.List;
 
 /**
  * Created by pedro on 5/22/15.
+ *
+ * Adapter for the weather locations.
  */
 public class ConditionsAdapter extends FragmentPagerAdapter {
 
@@ -21,9 +23,9 @@ public class ConditionsAdapter extends FragmentPagerAdapter {
 
     public ConditionsAdapter(FragmentManager fm) {
         super(fm);
-        locations.add(IConditionsRequest.CURRENT_LOCATION);
-        locations.add("Hong Kong");
-        locations.add("London");
+//        locations.add(IConditionsRequest.CURRENT_LOCATION);
+//        locations.add("Hong Kong");
+//        locations.add("London");
     }
 
     public void add(String location) {

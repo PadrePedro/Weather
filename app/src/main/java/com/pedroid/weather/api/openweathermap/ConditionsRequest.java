@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  * Created by pedro on 5/21/15.
+ *
+ * Open Weather Map request object
  */
 public class ConditionsRequest extends Request implements IConditionsRequest {
 
@@ -50,11 +52,24 @@ public class ConditionsRequest extends Request implements IConditionsRequest {
         public int cod;
     }
 
+    /**
+     * Request by location
+     *
+     * @param location
+     * @param listener
+     */
     public ConditionsRequest(String location, IRequestListener listener) {
         super(listener);
         this.location = location;
     }
 
+    /**
+     * Request by geo code
+     *
+     * @param lat
+     * @param lon
+     * @param listener
+     */
     public ConditionsRequest(double lat, double lon, IRequestListener listener) {
         super(listener);
         this.lat = lat;

@@ -14,6 +14,10 @@ import org.w3c.dom.Text;
 
 /**
  * Created by pedro on 5/24/15.
+ *
+ * Widget allows toggling between two values.  Functions like radio control with two buttons,
+ * but displayed like two buttons side-to-side.
+ *
  */
 public class Switch extends LinearLayout {
 

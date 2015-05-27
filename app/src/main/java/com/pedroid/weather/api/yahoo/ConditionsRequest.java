@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  * Created by pedro on 5/26/15.
+ *
+ * Yahoo Weather request object
  */
 public class ConditionsRequest extends Request implements IConditionsRequest {
 
@@ -21,6 +23,7 @@ public class ConditionsRequest extends Request implements IConditionsRequest {
     private final String QUERY_BY_LOCATION = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22#####%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
     private final String QUERY_BY_GEO = "http://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f";
 
+    // json mappings
     private static class Forecast implements Serializable {
         public int high;
         public int low;
@@ -82,11 +85,24 @@ public class ConditionsRequest extends Request implements IConditionsRequest {
         public Address address;
     }
 
+    /**
+     * Request by location
+     *
+     * @param location
+     * @param listener
+     */
     public ConditionsRequest(String location, IRequestListener listener) {
         super(listener);
         this.location = location;
     }
 
+    /**
+     * Request by geo code
+     *
+     * @param lat
+     * @param lon
+     * @param listener
+     */
     public ConditionsRequest(double lat, double lon, IRequestListener listener) {
         super(listener);
         this.lat = lat;
@@ -112,6 +128,15 @@ public class ConditionsRequest extends Request implements IConditionsRequest {
         }
     }
 
+    /**
+     * Given a location name, return corresponding geocode.
+     * This is needed becuse Yahoo doesn't support weather request by lat/lon.
+     *
+     * @param lat
+     * @param lon
+     * @return location name (city)
+     * @throws Exception
+     */
     private String reverseGeoCode(double lat, double lon) throws Exception {
         String query = String.format(REVERSE_GEOCODE, lat, lon);
         String json = httpGetRequest(query);

@@ -2,6 +2,8 @@ package com.pedroid.weather.utils;
 
 /**
  * Created by pedro on 5/21/15.
+ *
+ * Json serialization/deserialization helper class
  */
 
 import java.io.IOException;

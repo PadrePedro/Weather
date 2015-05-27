@@ -42,6 +42,9 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
     private ImageView bgConditionsImageView;
     private ImageView deleteLocationImageView;
 
+    /**
+     * receives message when a location is added
+     */
     private class WeatherActivityReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -121,17 +124,24 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
         return true;
     }
 
+    /**
+     * Returns random background
+     *
+     * @return background drawable resource ID
+     */
     private int getRandomBackground() {
-        int resources[] = { R.drawable.bg_cond_boats,
-                            R.drawable.bg_cond_bubble,
-                            R.drawable.bg_cond_bw,
-                            R.drawable.bg_cond_city_sky,
-                            R.drawable.bg_cond_clear,
-                            R.drawable.bg_cond_fair,
-                            R.drawable.bg_cond_mountain,
-                            R.drawable.bg_cond_plant,
-                            R.drawable.bg_cond_rain,
-                            R.drawable.bg_cond_stars};
+        int resources[] = {
+                R.drawable.bg_cond_1,
+                R.drawable.bg_cond_4,
+                R.drawable.bg_cond_5,
+                R.drawable.bg_cond_boats,
+                R.drawable.bg_cond_bw,
+                R.drawable.bg_cond_clear,
+                R.drawable.bg_cond_fair,
+                R.drawable.bg_cond_mountain,
+                R.drawable.bg_cond_plant,
+                R.drawable.bg_cond_rain,
+                R.drawable.bg_cond_stars};
         return resources[(int)(System.currentTimeMillis()/10000) % resources.length];
     }
 

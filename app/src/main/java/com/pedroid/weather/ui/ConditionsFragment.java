@@ -30,6 +30,9 @@ import com.pedroid.weather.utils.BroadcastUtils;
 
 /**
  * Created by pedro on 5/22/15.
+ *
+ * Main fragment for each location
+ *
  */
 public class ConditionsFragment extends Fragment implements IRequestListener, LocationListener {
 
@@ -105,6 +108,9 @@ public class ConditionsFragment extends Fragment implements IRequestListener, Lo
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(receiver);
     }
 
+    /**
+     * Redraw the values from the model. Primarily used when units are changed.
+     */
     private void refreshData() {
         conditionsRequest = RequestCache.getInstance().getConditions(location);
         if (conditionsRequest != null) {
@@ -146,6 +152,9 @@ public class ConditionsFragment extends Fragment implements IRequestListener, Lo
         }
     }
 
+    /**
+     * Redraw the fragment
+     */
     private void updateView() {
         Settings s = Settings.getInstance(getActivity());
         fadeIn();
@@ -162,6 +171,12 @@ public class ConditionsFragment extends Fragment implements IRequestListener, Lo
         humidityTextView.setText(String.format("%d%%", (int) conditionsRequest.getHumidity()));
     }
 
+    /**
+     * Map conditions string to weather icon
+     *
+     * @param conditions
+     * @return weather icon resource id
+     */
     private int getConditionsIcon(String conditions) {
         String cond = conditions.toLowerCase();
         if (cond.contains("rain"))
@@ -196,6 +211,9 @@ public class ConditionsFragment extends Fragment implements IRequestListener, Lo
 
     }
 
+    /**
+     * fade in entire view
+     */
     private void fadeIn() {
         ValueAnimator animator = ValueAnimator.ofFloat(0,1);
         animator.setDuration(400);

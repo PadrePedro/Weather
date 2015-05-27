@@ -7,6 +7,8 @@ import com.pedroid.weather.api.IRequestFactory;
 
 /**
  * Created by pedro on 5/22/15.
+ *
+ * Request factory for Open Weather Map
  */
 public class OpenWeatherMapRequestFactory implements IRequestFactory {
 
@@ -22,6 +24,7 @@ public class OpenWeatherMapRequestFactory implements IRequestFactory {
 
     @Override
     public ILocationRequest getLocationRequest(String location, IRequestListener listener) {
+        // not implemented yet
         return null;
     }
 }

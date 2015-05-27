@@ -19,6 +19,8 @@ import java.util.List;
 
 /**
  * Created by pedro on 5/23/15.
+ *
+ * Settings are stored/retrieved from Android preferences.
  */
 public class Settings {
 

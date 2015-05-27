@@ -18,12 +18,11 @@ import com.pedroid.weather.api.IRequestListener;
 
 /**
  * Created by pedro on 5/23/15.
+ *
+ * Add location popup dialog fragment
  */
-public class AddLocationFragment extends DialogFragment implements IRequestListener {
+public class AddLocationFragment extends DialogFragment {
 
-    interface AddLocationListener {
-        void locationAdded(String location);
-    }
     public static String LOCATION_ADDED = "location_added";
     public static String LOCATION = "location";
 
@@ -49,21 +48,10 @@ public class AddLocationFragment extends DialogFragment implements IRequestListe
                 .setNegativeButton(R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-//                                ((FragmentAlertDialog)getActivity()).doNegativeClick();
                             }
                         }
                 )
                 .setView(frameView)
                 .create();
-    }
-
-    @Override
-    public void onSuccess(IRequest request) {
-
-    }
-
-    @Override
-    public void onFailure(IRequest request, String reason) {
-
     }
 }
