@@ -29,7 +29,13 @@
     <string name="unit_one">One</string>
     <string name="unit_multi">Multi</string>
 
+    <!-- API factory setting -->
+    <string name="factory_label">API</string>
+    <string name="open_weather_map">OWM</string>
+    <string name="yahoo">Yahoo</string>
+
     <!-- messages and toasts -->
+    <string name="enable_location">Please enable location services in order to get weather information for your current location.</string>
     <string name="confirm_delete_location">Delete this location?</string>
     <string name="location_not_found">Location not found</string>
 

@@ -75,7 +75,7 @@ public class ConditionsRequest extends Request implements IConditionsRequest {
         }
         String json = httpGetRequest(queryString);
         conditions = JsonUtils.deserialize(json, Conditions.class);
-        if (conditions != null && conditions.cod != 200) {
+        if (conditions == null || conditions.cod != 200) {
             throw new RuntimeException(conditions.message + " " + location);
         }
     }

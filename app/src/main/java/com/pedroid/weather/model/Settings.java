@@ -9,6 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.pedroid.weather.api.IConditionsRequest;
 import com.pedroid.weather.api.IConditionsRequest.TempUnit;
 import com.pedroid.weather.api.IConditionsRequest.VelocityUnit;
+import com.pedroid.weather.api.RequestFactory;
 import com.pedroid.weather.api.RequestProcessor;
 import com.pedroid.weather.api.RequestProcessor.ThreadCount;
 import com.pedroid.weather.utils.BroadcastUtils;
@@ -23,20 +24,23 @@ public class Settings {
 
     private static Settings instance;
     private Context context;
-    private TempUnit tempUnit = TempUnit.FAHRENHEIT;
-    private VelocityUnit velocityUnit = VelocityUnit.MPH;
-    private ThreadCount threadCount = ThreadCount.ONE;
+    private TempUnit tempUnit;
+    private VelocityUnit velocityUnit;
+    private ThreadCount threadCount;
+    private RequestFactory.Factory factory;
 
     private final String PREF_TEMP = "pref.temperature";
     private final String PREF_VELOCITY = "pref.velocity";
     private final String PREF_THREADS = "pref.threads";
     private final String PREF_LOCATIONS = "pref.locations";
+    private final String PREF_FACTORY = "pref.factory";
 
     private Settings(Context context) {
         this.context = context;
         tempUnit = TempUnit.values()[PreferenceManager.getDefaultSharedPreferences(context).getInt(PREF_TEMP, 0)];
         velocityUnit = VelocityUnit.values()[PreferenceManager.getDefaultSharedPreferences(context).getInt(PREF_VELOCITY, 0)];
         threadCount = ThreadCount.values()[PreferenceManager.getDefaultSharedPreferences(context).getInt(PREF_THREADS, 0)];
+        factory = RequestFactory.Factory.values()[PreferenceManager.getDefaultSharedPreferences(context).getInt(PREF_FACTORY, 0)];
     }
 
     public static Settings getInstance(Context context) {
@@ -98,6 +102,15 @@ public class Settings {
     public void setThreadCount(ThreadCount count) {
         threadCount = count;
         PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(PREF_THREADS, count.ordinal()).commit();
+    }
+
+    public RequestFactory.Factory getRequestFactory() {
+        return factory;
+    }
+
+    public void setRequestFactory(RequestFactory.Factory factory) {
+        this.factory = factory;;
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(PREF_FACTORY, factory.ordinal()).commit();
     }
 
 }

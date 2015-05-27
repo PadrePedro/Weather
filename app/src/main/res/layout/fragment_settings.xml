@@ -35,4 +35,15 @@
         custom:label="@string/theads_label"
         custom:value1Text="@string/unit_one"
         custom:value2Text="@string/unit_multi" />
+
+    <com.pedroid.weather.widget.Switch
+        android:id="@+id/apiFactorySwitch"
+        android:layout_width="@dimen/switch_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_large"
+        custom:label="@string/theads_label"
+        custom:value1Text="@string/open_weather_map"
+        custom:value2Text="@string/yahoo" />
+
 </LinearLayout>

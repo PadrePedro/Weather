@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.pedroid.weather.R;
 import com.pedroid.weather.api.IConditionsRequest;
+import com.pedroid.weather.api.RequestFactory;
 import com.pedroid.weather.api.RequestProcessor;
 import com.pedroid.weather.api.RequestProcessor.ThreadCount;
 import com.pedroid.weather.model.Settings;
@@ -22,6 +23,7 @@ public class SettingsFragment extends Fragment {
     private Switch temperatureSwitch;
     private Switch velocitySwitch;
     private Switch threadsSwitch;
+    private Switch apiFactorySwitch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,6 +68,21 @@ public class SettingsFragment extends Fragment {
             public void onValue2Selected() {
                 Settings.getInstance(getActivity()).setThreadCount(ThreadCount.MULTI);
                 RequestProcessor.setThreads(RequestProcessor.THREADS_MANY);
+            }
+        });
+        apiFactorySwitch = (Switch)layout.findViewById(R.id.apiFactorySwitch);
+        apiFactorySwitch.selectValue(Settings.getInstance(getActivity()).getRequestFactory().ordinal());
+        apiFactorySwitch.setSwitchListener(new Switch.SwitchListener() {
+            @Override
+            public void onValue1Selected() {
+                Settings.getInstance(getActivity()).setRequestFactory(RequestFactory.Factory.OPEN_WEATHER_MAP);
+                RequestFactory.setFactory(RequestFactory.Factory.OPEN_WEATHER_MAP);
+            }
+
+            @Override
+            public void onValue2Selected() {
+                Settings.getInstance(getActivity()).setRequestFactory(RequestFactory.Factory.YAHOO);
+                RequestFactory.setFactory(RequestFactory.Factory.YAHOO);
             }
         });
         return layout;

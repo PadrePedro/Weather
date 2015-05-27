@@ -1,4 +1,8 @@
-package com.pedroid.weather.api.openweathermap;
+package com.pedroid.weather.api.yahoo;
+
+/**
+ * Created by pedro on 5/26/15.
+ */
 
 import com.pedroid.weather.api.IConditionsRequest;
 import com.pedroid.weather.api.ILocationRequest;
@@ -8,7 +12,7 @@ import com.pedroid.weather.api.IRequestFactory;
 /**
  * Created by pedro on 5/22/15.
  */
-public class OpenWeatherMapRequestFactory implements IRequestFactory {
+public class YahooRequestFactory implements IRequestFactory {
 
     @Override
     public IConditionsRequest getConditionsRequest(double lat, double lon, IRequestListener listener) {

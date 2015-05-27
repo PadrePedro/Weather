@@ -15,7 +15,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -31,7 +30,9 @@ import com.pedroid.weather.model.RequestCache;
 import com.pedroid.weather.model.Settings;
 import com.pedroid.weather.utils.BroadcastUtils;
 
-
+/**
+ * Main application activity
+ */
 public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener, IRequestListener {
 
     private ViewPager pager;
@@ -56,7 +57,6 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
 
         // hide status bar
         View decorView = getWindow().getDecorView();
-        // Hide the status bar.
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
         // Remember that you should never show the action bar if the
@@ -64,6 +64,9 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        // setup request factory
+        RequestFactory.setFactory(Settings.getInstance(this).getRequestFactory());
+        // setup number of processor threads
         RequestProcessor.setThreads(Settings.getInstance(this).getThreadCount() == ThreadCount.ONE ? RequestProcessor.THREADS_ONE : RequestProcessor.THREADS_MANY);
 
         // setup layout
@@ -98,6 +101,7 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
                 dlg.show(getFragmentManager(), "tag");
             }
         });
+        // pager/adapter
         pager = (ViewPager)findViewById(R.id.pager);
         adapter = new com.pedroid.weather.ui.ConditionsAdapter(getSupportFragmentManager());
         adapter.setLoctions(Settings.getInstance(this).getLocations());
@@ -117,40 +121,17 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            DialogFragment dlg = new AddLocationFragment();
-            dlg.show(getFragmentManager(), "tag");
-            return true;
-        }
-        else if (id == R.id.action_refresh) {
-            refreshData();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void refreshData() {
-        Intent intent = new Intent(BroadcastUtils.MSG_REFRESH);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-    }
-
     private int getRandomBackground() {
-        int resources[] = { R.drawable.bg_cond_clear,
-                            R.drawable.bg_cond_fair,
-                            R.drawable.bg_cond_boats,
-                            R.drawable.bg_cond_sunny,
-                            R.drawable.bg_cond_plant,
-                            R.drawable.bg_cond_city_sky,
+        int resources[] = { R.drawable.bg_cond_boats,
+                            R.drawable.bg_cond_bubble,
                             R.drawable.bg_cond_bw,
-                            R.drawable.bg_cond_rain};
+                            R.drawable.bg_cond_city_sky,
+                            R.drawable.bg_cond_clear,
+                            R.drawable.bg_cond_fair,
+                            R.drawable.bg_cond_mountain,
+                            R.drawable.bg_cond_plant,
+                            R.drawable.bg_cond_rain,
+                            R.drawable.bg_cond_stars};
         return resources[(int)(System.currentTimeMillis()/10000) % resources.length];
     }
 
@@ -167,6 +148,7 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
 
     @Override
     public void onPageSelected(int position) {
+        // the 0th item is the current location, which cannot be deleted
         deleteLocationImageView.setVisibility(position>0 ? View.VISIBLE : View.INVISIBLE);
     }
 
@@ -175,8 +157,9 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
 
     }
 
-
-
+    /**
+     * Prompt user if location should be deleted
+     */
     private void handleDeleteLocation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.confirm_delete_location)
@@ -191,7 +174,6 @@ public class WeatherActivity extends ActionBarActivity implements ViewPager.OnPa
                     }
                 });
         builder.create().show();
-
     }
 
     @Override

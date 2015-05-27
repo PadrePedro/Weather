@@ -1,6 +1,7 @@
 package com.pedroid.weather.api;
 
 import com.pedroid.weather.api.openweathermap.OpenWeatherMapRequestFactory;
+import com.pedroid.weather.api.yahoo.YahooRequestFactory;
 
 /**
  * Created by pedro on 5/22/15.
@@ -9,18 +10,31 @@ import com.pedroid.weather.api.openweathermap.OpenWeatherMapRequestFactory;
  */
 public class RequestFactory {
 
-    private static IWeatherRequestFactory instance;
+    public enum Factory {OPEN_WEATHER_MAP, YAHOO};
+
+    private static IRequestFactory instance;
 
     /**
      * Gets singleton instance
      *
-     * @return IWeatherRequestFactory implementation
+     * @return IRequestFactory implementation
      */
-    public static IWeatherRequestFactory getInstance() {
-        if (instance == null) {
+    public static IRequestFactory getInstance() {
+        return instance;
+    }
+
+    /**
+     * Sets the API factory
+     *
+     * @param factory
+     */
+    public static void setFactory(Factory factory) {
+        if (factory == Factory.OPEN_WEATHER_MAP) {
             instance = new OpenWeatherMapRequestFactory();
         }
-        return instance;
+        else if (factory == Factory.YAHOO) {
+            instance = new YahooRequestFactory();
+        }
     }
 
 }
