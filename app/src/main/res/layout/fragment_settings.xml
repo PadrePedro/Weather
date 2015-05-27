@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/margin_large"
-        custom:label="@string/theads_label"
+        custom:label="@string/api_label"
         custom:value1Text="@string/open_weather_map"
         custom:value2Text="@string/yahoo" />
 

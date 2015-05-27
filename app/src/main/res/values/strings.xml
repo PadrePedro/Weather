@@ -30,7 +30,7 @@
     <string name="unit_multi">Multi</string>
 
     <!-- API factory setting -->
-    <string name="factory_label">API</string>
+    <string name="api_label">API</string>
     <string name="open_weather_map">OWM</string>
     <string name="yahoo">Yahoo</string>
 
