@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -27,6 +28,7 @@ import com.pedroid.weather.api.RequestProcessor;
 import com.pedroid.weather.model.RequestCache;
 import com.pedroid.weather.model.Settings;
 import com.pedroid.weather.utils.BroadcastUtils;
+import com.pedroid.weather.utils.LocationUtils;
 
 /**
  * Created by pedro on 5/22/15.
@@ -48,6 +50,7 @@ public class ConditionsFragment extends Fragment implements IRequestListener, Lo
     private TextView locationTextView;
     private TextView conditionTextView;
     private ImageView conditionsIconImageView;
+    private TextView enableLocationTextView;
 
     private String location;
     private IConditionsRequest conditionsRequest;
@@ -74,6 +77,15 @@ public class ConditionsFragment extends Fragment implements IRequestListener, Lo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.fragment_conditions, container, false);
+        enableLocationTextView = (TextView)layout.findViewById(R.id.enableLocationTextView);
+        enableLocationTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent( android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                getActivity().startActivity(myIntent);
+            }
+        });
+
         temperatureTextView = (TextView)layout.findViewById(R.id.temperatureTextView);
         temperatureUnitTextView = (TextView)layout.findViewById(R.id.temperatureUnitTextView);
         locationTextView = (TextView)layout.findViewById(R.id.locationTextView);
@@ -118,13 +130,19 @@ public class ConditionsFragment extends Fragment implements IRequestListener, Lo
         }
         else {
             if (IConditionsRequest.CURRENT_LOCATION.equals(location)) {
-                locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                if (location != null) {
-                    conditionsRequest = RequestFactory.getInstance().getConditionsRequest(location.getLatitude(), location.getLongitude(), this);
+                if (LocationUtils.isLocationServicesEnabled(getActivity())) {
+                    locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                    Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    if (location != null) {
+                        conditionsRequest = RequestFactory.getInstance().getConditionsRequest(location.getLatitude(), location.getLongitude(), this);
+                    } else {
+                        Criteria criteria = new Criteria();
+                        criteria.setAccuracy(Criteria.NO_REQUIREMENT);
+                        locationManager.requestSingleUpdate(criteria, this, null);
+                    }
                 }
                 else {
-                    locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, null);
+                    enableLocationTextView.setVisibility(View.VISIBLE);
                 }
             } else {
                 conditionsRequest = RequestFactory.getInstance().getConditionsRequest(location, this);
@@ -158,6 +176,7 @@ public class ConditionsFragment extends Fragment implements IRequestListener, Lo
     private void updateView() {
         Settings s = Settings.getInstance(getActivity());
         fadeIn();
+        enableLocationTextView.setVisibility(View.INVISIBLE);
         temperatureTextView.setText(String.format("%d",
                 (int) conditionsRequest.getTemperature(s.getTempUnit()),
                 s.getTempUnitString()));

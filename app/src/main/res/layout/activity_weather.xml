@@ -56,6 +56,7 @@
         <ImageView
             android:id="@+id/deleteLocationImageView"
             android:src="@drawable/ic_action_discard"
+            android:visibility="invisible"
             android:layout_margin="@dimen/margin_default"
             android:layout_above="@id/newLocationImageView"
             android:layout_alignParentRight="true"

@@ -35,7 +35,7 @@
     <string name="yahoo">Yahoo</string>
 
     <!-- messages and toasts -->
-    <string name="enable_location">Please enable location services in order to get weather information for your current location.</string>
+    <string name="enable_location">Please enable <u>location services</u> in order to get weather information for your current location.</string>
     <string name="confirm_delete_location">Delete this location?</string>
     <string name="location_not_found">Location not found</string>
 

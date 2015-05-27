@@ -8,7 +8,7 @@ import android.provider.Settings;
  */
 public class LocationUtils {
 
-    public boolean isLocationServicesEnabled(Context context) {
+    public static boolean isLocationServicesEnabled(Context context) {
         int locationMode = 0;
         try {
             locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
