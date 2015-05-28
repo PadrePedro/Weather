@@ -177,7 +177,7 @@ public class ConditionsRequest extends Request implements IConditionsRequest {
     public double getTemperature(TempUnit unit) {
         Condition condition = getCondition();
         if (condition != null) {
-            return condition.temp;
+            return convert(unit, condition.temp);
         }
         return 0;
     }
@@ -186,7 +186,7 @@ public class ConditionsRequest extends Request implements IConditionsRequest {
     public double getHiTemperature(TempUnit unit) {
         Forecast forecast = getForecast();
         if (forecast != null) {
-            return forecast.high;
+            return convert(unit, forecast.high);
         }
         return 0;
     }
@@ -195,7 +195,7 @@ public class ConditionsRequest extends Request implements IConditionsRequest {
     public double getLoTemperature(TempUnit unit) {
         Forecast forecast = getForecast();
         if (forecast != null) {
-            return forecast.low;
+            return convert(unit, forecast.low);
         }
         return 0;
     }
@@ -204,7 +204,7 @@ public class ConditionsRequest extends Request implements IConditionsRequest {
     public double getWindVelocity(VelocityUnit unit) {
         Wind wind = getWind();
         if (wind != null) {
-            return wind.speed;
+            return convert(unit, wind.speed);
         }
         return 0;
     }
@@ -281,5 +281,25 @@ public class ConditionsRequest extends Request implements IConditionsRequest {
             return channel.location;
         }
         return null;
+    }
+
+    private int convert(VelocityUnit unit, int velocity) {
+        if (unit == VelocityUnit.MPH) {
+            return velocity;
+        }
+        else if (unit == VelocityUnit.KPH) {
+            return (int)(velocity * 1.60934);
+        }
+        return 0;
+    }
+
+    private int convert(TempUnit unit, int tempFahrenheit) {
+        if (unit == TempUnit.FAHRENHEIT) {
+            return tempFahrenheit;
+        }
+        else if (unit == TempUnit.CELSIUS) {
+            return (int)((tempFahrenheit - 32) * (5.0/9.0));
+        }
+        return 0;
     }
 }
